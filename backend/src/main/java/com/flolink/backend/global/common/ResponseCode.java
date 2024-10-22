@@ -68,6 +68,7 @@ public enum ResponseCode {
 	NOT_MATCH_ROOMID(404, "The RoomId entered does not match the DB.", "NOT_MATCH_TOKEN"),
 	NOT_FOUND_AUTHNUM(404, "The AuthNum does not match the DB.", "NOT_FOUND_AUTHNUM"),
 	NOT_MATCH_AUTHNUM(404, "The AuthNum entered does not match the DB.", "NOT_MATCH_AUTHNUM"),
+	DUPLICATE_REQEUST(409, "Duplicate request", "Duplicate request: Already processed."),
 
 	//Calendar
 	CALENDAR_NOT_FOUND(404, "Calendar not found", "CALENDAR_NOT_FOUND"),

@@ -41,6 +41,7 @@ public class AuthServiceImpl implements AuthService {
 	private final UserRepository userRepository;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 	private final RefreshRepository refreshRepository;
+	private final IdempotencyService idempotencyService;  // Redis 관련 서비스 주입
 
 	@Value("${nurigo.api.key}")
 	private String apiKey;
@@ -59,6 +60,13 @@ public class AuthServiceImpl implements AuthService {
 	@Override
 	@Transactional
 	public void sendAuthenticationNumber(String tel) {
+		// Redis 멱등성 처리
+		if (idempotencyService.isDuplicateRequest(tel)) {
+			// 중복 요청인 경우 409 Conflict 응답 반환
+			throw new TimeOutException(ResponseCode.DUPLICATE_REQEUST);
+		}
+		idempotencyService.saveRequestId(tel);
+
 		DefaultMessageService messageService = NurigoApp.INSTANCE.initialize(
 			apiKey, apiSecret, domain);
 
